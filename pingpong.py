@@ -29,6 +29,8 @@ win_width = 600
 win_height = 500
 player_img = 'player.png'
 ball_img = 'ball.png'
+speed_x = 3
+speed_y = 3
 
 window = display.set_mode((win_width, win_height))
 display.set_caption('Ping Pong')
@@ -55,6 +57,19 @@ while game:
 
         player1.reset()
         player2.reset()
+
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
+
+        if sprite.collide_rect(ball, player1) or sprite.collide_rect(ball, player2):
+            speed_x *= -1
+
+        if ball.rect.y > win_height-50 or ball.rect.y < 0:
+            speed_y *= -1
+
+        
+        
+        ball.reset()
 
     display.update()
     clock.tick(FPS)
