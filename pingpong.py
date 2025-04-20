@@ -32,6 +32,11 @@ ball_img = 'ball.png'
 speed_x = 3
 speed_y = 3
 
+clock = time.Clock()
+FPS = 60
+game = True
+finish = False
+
 window = display.set_mode((win_width, win_height))
 display.set_caption('Ping Pong')
 background = transform.scale(image.load('background.jpg'), (win_width, win_height))
@@ -40,10 +45,10 @@ player1 = Player(player_img, 5, 5, 25, 130, 5)
 player2 = Player(player_img, 570, 365, 25, 130, 5)
 ball = GameSprite(ball_img, 200, 200, 50, 50, 4)
 
-clock = time.Clock()
-FPS = 60
-game = True
-finish = False
+font.init()
+font = font.Font(None, 50)
+lose1 = font.render('PLAYER 1 LOSE!!', True, (255, 0, 0))
+lose2 = font.render('PLAYER 2 LOSE!!', True, (255, 0, 0))
 
 while game:
     for e in event.get():
@@ -55,9 +60,6 @@ while game:
         player1.update_r()
         player2.update_1()
 
-        player1.reset()
-        player2.reset()
-
         ball.rect.x += speed_x
         ball.rect.y += speed_y
 
@@ -67,8 +69,16 @@ while game:
         if ball.rect.y > win_height-50 or ball.rect.y < 0:
             speed_y *= -1
 
+        if ball.rect.x < 0:
+            finish = True
+            window.blit(lose1, (180, 230))
+
+        if ball.rect.x > win_width:
+            finish = True
+            window.blit(lose2, (180, 230))
         
-        
+        player1.reset()
+        player2.reset()
         ball.reset()
 
     display.update()
